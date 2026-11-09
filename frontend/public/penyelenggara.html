@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Penyelenggara - Universitas Janabadra</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #0F172A; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <div class="flex-1 flex">
+    <!-- SIDEBAR KIRI (Persis penyelenggara.jpg) -->
+    <aside class="w-64 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shrink-0 hidden md:flex">
+      <div class="space-y-6">
+        <!-- Logo UJB -->
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 p-1 flex items-center justify-center shrink-0 border border-blue-100">
+            <img src="/Universitas_Janabadra.png" alt="UJB" class="w-full h-full object-contain">
+          </div>
+          <div>
+            <h1 class="text-sm font-black text-slate-900 leading-none">Universitas</h1>
+            <h2 class="text-sm font-black text-blue-700 leading-tight">Janabadra</h2>
+            <p class="text-[10px] text-slate-400 font-medium">Kalender Kegiatan</p>
+          </div>
+        </div>
+
+        <!-- Menu Navigasi Penyelenggara -->
+        <nav class="space-y-1.5 text-xs font-bold">
+          <button class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard</span>
+          </button>
+          <button class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Ajukan Kegiatan</span>
+          </button>
+          <button class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+            <i data-lucide="calendar-days" class="w-4 h-4"></i>
+            <span>Kelola Kegiatan</span>
+          </button>
+          <button onclick="document.getElementById('modalScanner').classList.remove('hidden')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-all border border-emerald-200">
+            <i data-lucide="camera" class="w-4 h-4"></i>
+            <span>Scanner Meja Registrasi</span>
+          </button>
+          <button class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>Sertifikat Saya</span>
+          </button>
+          <button class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span>Profil Organisasi</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Watermark Kampus & Logout -->
+      <div class="space-y-3 pt-4 border-t border-slate-100">
+        <div class="p-2 bg-slate-50 rounded-xl border border-slate-100 flex items-center gap-2.5">
+          <i data-lucide="building-2" class="w-6 h-6 text-blue-600 shrink-0"></i>
+          <div class="text-[10px] text-slate-500 leading-tight">
+            <p class="font-bold text-slate-800">Kampus Pusat UJB</p>
+            <p>Yogyakarta</p>
+          </div>
+        </div>
+        <a href="/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold border border-rose-200">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Keluar ke Beranda</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA (Persis penyelenggara.jpg) -->
+    <div class="flex-1 flex flex-col min-w-0">
+      
+      <!-- Topbar Header -->
+      <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-4 sticky top-0 z-20">
+        <div class="flex items-center gap-3 flex-1 max-w-md">
+          <i data-lucide="menu" class="w-5 h-5 text-slate-500 md:hidden cursor-pointer"></i>
+          <h2 class="text-sm font-bold text-slate-700 hidden sm:block">Panel Pengurus UKM / Panitia</h2>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full cursor-pointer">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span class="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">2</span>
+          </div>
+
+          <!-- Avatar UKM -->
+          <div class="flex items-center gap-2.5 pl-3 border-l border-slate-200">
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center">
+              UI
+            </div>
+            <div class="text-left hidden sm:block">
+              <p class="text-xs font-bold text-slate-900 leading-tight">UKM Informatika UJB</p>
+              <p class="text-[10px] text-slate-400">Penyelenggara Resmi</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="flex-1 p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+        
+        <!-- Header Dashboard Penyelenggara -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Dashboard Penyelenggara</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Kelola kegiatan dan pantau status pengajuan Anda di sini.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="document.getElementById('modalStaff').classList.remove('hidden')" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span>Kelola Staf Scanner (3)</span>
+            </button>
+            <button class="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/20">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Ajukan Kegiatan &rarr;</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 STATS CARDS (Persis penyelenggara.jpg) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1 -->
+          <div class="relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-5 shadow-xs">
+            <div class="flex items-center justify-between">
+              <div class="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/30">
+                <i data-lucide="calendar" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">&uarr; 1</span>
+            </div>
+            <div class="mt-3">
+              <span class="text-2xl font-black text-slate-900">3</span>
+              <p class="text-xs font-bold text-slate-500 mt-0.5">Total Kegiatan</p>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-5 shadow-xs">
+            <div class="flex items-center justify-between">
+              <div class="w-11 h-11 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/30">
+                <i data-lucide="clock" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">&uarr; 0</span>
+            </div>
+            <div class="mt-3">
+              <span class="text-2xl font-black text-slate-900">1</span>
+              <p class="text-xs font-bold text-slate-500 mt-0.5">Pengajuan Menunggu Verifikasi</p>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-5 shadow-xs">
+            <div class="flex items-center justify-between">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/30">
+                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">&uarr; 0</span>
+            </div>
+            <div class="mt-3">
+              <span class="text-2xl font-black text-slate-900">2</span>
+              <p class="text-xs font-bold text-slate-500 mt-0.5">Kegiatan Disetujui</p>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-5 shadow-xs">
+            <div class="flex items-center justify-between">
+              <div class="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/30">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">&uarr; 12</span>
+            </div>
+            <div class="mt-3">
+              <span class="text-2xl font-black text-slate-900">245</span>
+              <p class="text-xs font-bold text-slate-500 mt-0.5">Total Peserta Terdaftar</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRID KALENDER & KEGIATAN MENDATANG -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Kalender Mini (4 Kolom) -->
+          <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i>
+                <h3 class="text-sm font-bold text-slate-900">Kalender Kegiatan</h3>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 bg-slate-100 rounded-md text-slate-600">Hari Ini</span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-bold text-slate-800">
+              <i data-lucide="chevron-left" class="w-4 h-4 cursor-pointer text-slate-500"></i>
+              <span>November 2026</span>
+              <i data-lucide="chevron-right" class="w-4 h-4 cursor-pointer text-slate-500"></i>
+            </div>
+
+            <div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400">
+              <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+            </div>
+
+            <!-- Grid Tanggal -->
+            <div class="grid grid-cols-7 gap-1 text-center text-xs">
+              <span class="py-1 text-slate-300">26</span><span class="py-1 text-slate-300">27</span><span class="py-1 text-slate-300">28</span><span class="py-1 text-slate-300">29</span><span class="py-1 text-slate-300">30</span><span class="py-1 text-slate-300">31</span><span class="py-1">1</span>
+              <span class="py-1">2</span><span class="py-1">3</span><span class="py-1">4</span><span class="py-1 bg-blue-600 text-white rounded-full font-bold">5</span><span class="py-1">6</span><span class="py-1">7</span><span class="py-1">8</span>
+              <span class="py-1">9</span><span class="py-1">10</span><span class="py-1">11</span><span class="py-1 font-bold text-blue-600">12 &bull;</span><span class="py-1">13</span><span class="py-1">14</span><span class="py-1">15</span>
+              <span class="py-1">16</span><span class="py-1">17</span><span class="py-1">18</span><span class="py-1">19</span><span class="py-1 font-bold text-blue-600">20 &bull;</span><span class="py-1">21</span><span class="py-1">22</span>
+              <span class="py-1">23</span><span class="py-1">24</span><span class="py-1">25</span><span class="py-1">26</span><span class="py-1 font-bold text-blue-600">27 &bull;</span><span class="py-1">28</span><span class="py-1">29</span>
+            </div>
+          </div>
+
+          <!-- Kegiatan Mendatang & Excel LPJ (8 Kolom) -->
+          <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i>
+                <span>Kegiatan Mendatang & Operasional Hari-H</span>
+              </h3>
+              <a href="#" class="text-xs font-bold text-blue-600">Lihat Semua &rarr;</a>
+            </div>
+
+            <div class="space-y-3">
+              <!-- Event Item 1 -->
+              <div class="p-3.5 rounded-2xl border border-slate-100 hover:border-blue-200 bg-slate-50/50 hover:bg-white transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5 min-w-0">
+                  <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&q=80" alt="Event" class="w-16 h-16 rounded-xl object-cover shrink-0">
+                  <div class="space-y-1 min-w-0">
+                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">Seminar Teknologi Informasi & AI Masa Depan</h4>
+                    <p class="text-[11px] text-slate-500">20 November 2026 &bull; 08.00 - 12.00 WIB</p>
+                    <p class="text-[11px] text-slate-500">Auditorium Kampus Pusat UJB</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button onclick="alert('Mengunduh Spreadsheet Rekap Presensi (.xlsx)...')" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-emerald-200">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    <span>Excel LPJ</span>
+                  </button>
+                  <button onclick="document.getElementById('modalScanner').classList.remove('hidden')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                    <span>Scan QR</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Event Item 2 -->
+              <div class="p-3.5 rounded-2xl border border-slate-100 hover:border-blue-200 bg-slate-50/50 hover:bg-white transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5 min-w-0">
+                  <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&q=80" alt="Event" class="w-16 h-16 rounded-xl object-cover shrink-0">
+                  <div class="space-y-1 min-w-0">
+                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">Festival Seni Mahasiswa Janabadra 2026</h4>
+                    <p class="text-[11px] text-slate-500">27 November 2026 &bull; 18.00 - 22.00 WIB</p>
+                    <p class="text-[11px] text-slate-500">Lapangan Utama Kampus</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button onclick="alert('Mengunduh Spreadsheet Rekap Presensi (.xlsx)...')" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-emerald-200">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    <span>Excel LPJ</span>
+                  </button>
+                  <button onclick="document.getElementById('modalScanner').classList.remove('hidden')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                    <span>Scan QR</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEPPER STATUS PENGAJUAN (Persis penyelenggara.jpg) -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="file-check" class="w-4 h-4 text-blue-600"></i>
+              <span>Status Pengajuan Kegiatan Resmi (Alur Berkas Fisik Proposal)</span>
+            </h3>
+            <span class="text-xs font-bold text-blue-600">Lihat Detail &rarr;</span>
+          </div>
+
+          <div class="py-4">
+            <div class="grid grid-cols-5 text-center relative">
+              <!-- Step 1 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-md">✓</div>
+                <div>
+                  <p class="text-[11px] font-bold text-slate-900">Pengajuan Dikirim</p>
+                  <p class="text-[9px] text-slate-500">05 Nov 2026</p>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-md">✓</div>
+                <div>
+                  <p class="text-[11px] font-bold text-slate-900">Berkas Diterima</p>
+                  <p class="text-[9px] text-slate-500">06 Nov 2026</p>
+                </div>
+              </div>
+
+              <!-- Step 3 (Active) -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs ring-4 ring-blue-100">3</div>
+                <div>
+                  <p class="text-[11px] font-bold text-blue-600">Menunggu Verifikasi</p>
+                  <p class="text-[9px] text-slate-500">Sedang Dicek Admin</p>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-300 text-slate-400 flex items-center justify-center font-bold text-xs">4</div>
+                <div>
+                  <p class="text-[11px] font-bold text-slate-400">Persetujuan Admin</p>
+                  <p class="text-[9px] text-slate-400">-</p>
+                </div>
+              </div>
+
+              <!-- Step 5 -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-300 text-slate-400 flex items-center justify-center font-bold text-xs">5</div>
+                <div>
+                  <p class="text-[11px] font-bold text-slate-400">Hak Akses 24 Jam</p>
+                  <p class="text-[9px] text-slate-400">Saat Hari-H</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL STAF SCANNER PANITIA -->
+  <div id="modalStaff" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4">
+      <div class="flex justify-between items-start border-b pb-3">
+        <div>
+          <h3 class="font-extrabold text-base text-slate-900">Kelola Staf Scanner (NIM & Nama)</h3>
+          <p class="text-xs text-slate-500">Anggota panitia yang bisa membuka scanner di HP saat hari-H.</p>
+        </div>
+        <button onclick="document.getElementById('modalStaff').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="p-2.5 bg-slate-50 rounded-xl flex justify-between">
+          <span>Dimas Prasetyo (NIM: 22102030)</span>
+          <span class="text-emerald-600 font-bold">Aktif Hari-H</span>
+        </div>
+        <div class="p-2.5 bg-slate-50 rounded-xl flex justify-between">
+          <span>Rina Anggraini (NIM: 22102045)</span>
+          <span class="text-emerald-600 font-bold">Aktif Hari-H</span>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('modalStaff').classList.add('hidden')" class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL SCANNER BARCODE -->
+  <div id="modalScanner" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 text-center">
+      <h3 class="font-extrabold text-base text-slate-900">Pemindai Barcode Meja Registrasi</h3>
+      <p class="text-xs text-slate-500">Sesi presensi aktif selama 24 jam di Hari-H acara.</p>
+      
+      <div class="h-48 bg-slate-900 rounded-2xl flex items-center justify-center border-2 border-emerald-400">
+        <span class="text-xs text-emerald-300 font-mono">[ Arahkan Kamera ke Barcode Peserta ]</span>
+      </div>
+
+      <button onclick="alert('Simulasi: Presensi Berhasil! Baris baru masuk ke Excel LPJ.'); document.getElementById('modalScanner').classList.add('hidden')" class="w-full py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold">
+        Simulasi Scan Tiket Hadir
+      </button>
+      <button onclick="document.getElementById('modalScanner').classList.add('hidden')" class="w-full py-2 border rounded-xl text-xs font-bold text-slate-600">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

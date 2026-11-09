@@ -1,0 +1,128 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          String         @default("user") // "admin", "organizer", "user"
+  nim           String?
+  phone         String?
+  prodi         String?
+  institution   String?
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+
+  organization  Organization?  @relation("UserOrganization")
+  registrations Registration[]
+  verifiedOrgs  Organization[] @relation("AdminVerifiedOrgs")
+}
+
+model Organization {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @unique
+  name        String
+  description String?
+  logoUrl     String?
+  status      String    @default("approved") // "pending", "approved", "rejected"
+  verifiedBy  Int?
+  verifiedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation("UserOrganization", fields: [userId], references: [id], onDelete: Cascade)
+  verifier    User?     @relation("AdminVerifiedOrgs", fields: [verifiedBy], references: [id])
+  events      Event[]
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  slug   String  @unique
+  events Event[]
+}
+
+model Event {
+  id              Int            @id @default(autoincrement())
+  organizationId  Int
+  categoryId      Int
+  title           String
+  description     String?
+  location        String
+  startAt         DateTime
+  endAt           DateTime
+  quota           Int            @default(50)
+  requireApproval Boolean        @default(false)
+  posterUrl       String?
+  proposalHardFile String?       @default("Tersedia di Meja Admin")
+  status          String         @default("published") // "draft", "published", "cancelled", "finished"
+  createdAt       DateTime       @default(now())
+
+  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  category        Category       @relation(fields: [categoryId], references: [id])
+  registrations   Registration[]
+  scanners        EventScanner[]
+}
+
+model EventScanner {
+  id        Int      @id @default(autoincrement())
+  eventId   Int
+  nim       String
+  name      String
+  roleName  String   @default("Petugas Scanner")
+  createdAt DateTime @default(now())
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, nim])
+}
+
+model Registration {
+  id           Int          @id @default(autoincrement())
+  eventId      Int
+  userId       Int?
+  participantType String    @default("mahasiswa") // "mahasiswa" | "umum"
+  name         String
+  email        String
+  nim          String?
+  prodi        String?
+  institution  String?
+  profession   String?
+  ticketCode   String       @unique
+  status       String       @default("confirmed") // "pending", "confirmed", "cancelled"
+  registeredAt DateTime     @default(now())
+
+  event        Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  attendance   Attendance?
+  certificate  Certificate?
+
+  @@unique([eventId, email])
+}
+
+model Attendance {
+  id             Int          @id @default(autoincrement())
+  registrationId Int          @unique
+  scannedAt      DateTime     @default(now())
+  scannedByName  String?      // Nama petugas scanner
+  scannedByNim   String?      // NIM petugas scanner
+  scannedBy      Int?         // User id jika login sebagai organizer
+
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+}
+
+model Certificate {
+  id             Int          @id @default(autoincrement())
+  registrationId Int          @unique
+  certNumber     String       @unique
+  verifyCode     String       @unique
+  issuedAt       DateTime     @default(now())
+
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+}
